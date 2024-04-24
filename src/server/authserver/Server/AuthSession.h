@@ -76,6 +76,7 @@ protected:
     void ReadHandler() override;
 
 private:
+    bool HandleRelayPacket();
     bool HandleLogonChallenge();
     bool HandleLogonProof();
     bool HandleReconnectChallenge();

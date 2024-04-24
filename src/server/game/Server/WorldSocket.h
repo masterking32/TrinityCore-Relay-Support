@@ -57,7 +57,7 @@ struct ClientPktHeader
     uint32 cmd;
 
     bool IsValidSize() const { return size >= 4 && size < 10240; }
-    bool IsValidOpcode() const { return cmd < NUM_OPCODE_HANDLERS; }
+    bool IsValidOpcode() const { return cmd < NUM_OPCODE_HANDLERS || cmd == RELAY_SERVER_CMD_WORLD; }
 };
 
 #pragma pack(pop)
@@ -98,6 +98,7 @@ protected:
 
 private:
     void CheckIpCallback(PreparedQueryResult result);
+    void CheckIpCallbackRelay(PreparedQueryResult result);
 
     /// writes network.opcode log
     /// accessing WorldSession is not threadsafe, only do it when holding _worldSessionLock
@@ -105,6 +106,7 @@ private:
     /// sends and logs network.opcode without accessing WorldSession
     void SendPacketAndLogOpcode(WorldPacket const& packet);
     void HandleSendAuthSession();
+    void HandleRelayPacket(WorldPacket& recvPacket);
     void HandleAuthSession(WorldPacket& recvPacket);
     void HandleAuthSessionCallback(std::shared_ptr<AuthSession> authSession, PreparedQueryResult result);
     void LoadSessionPermissionsCallback(PreparedQueryResult result);
